@@ -1,0 +1,29 @@
+{
+  "todos": [
+    {
+      "description": "This is a test todo from the server",
+      "priority": "1",
+      "id": "1"
+    },
+    {
+      "description": "test post",
+      "priority": 1,
+      "id": "nRGYRg4"
+    },
+    {
+      "description": "take out the bins",
+      "priority": "1",
+      "id": "twSoaPq"
+    },
+    {
+      "description": "clean my clothes",
+      "priority": "3",
+      "id": "V-woa7h"
+    },
+    {
+      "description": "clean my dishes",
+      "priority": "5",
+      "id": "9SGjzjV"
+    }
+  ]
+}

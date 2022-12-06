@@ -1,75 +1,29 @@
 const container = document.querySelector('#container');
-const input = document.querySelector('#input');
-const form = document.querySelector('#form');
-const priority = document.querySelector('#priority');
-const sort = document.querySelector('#sort');
+const button = document.querySelector('#button');
+// https://meowfacts.herokuapp.com/
 
-function createHtml(description, priority) {
+const getData = async () => {
+  const serverData = fetch('https://api.openweathermap.org/data/2.5/weather?q=sydney&appid=1d746361df4112d4a44339cc2fabd41b&units=metric')
+  .then((response) => response.json())
+  .then((data) => {
+    console.log(data);
+    return data
+  });
+
+  return serverData;
+}
+
+const createHtml = (temperature, visibility) => {
   return `
-    <div>
-      <p>${description}</p>
-      <p>Priority: ${priority}</p>
-    </div>
+    <p>The temp in sydney is ${temperature} and the visibility is ${visibility}</p>
   `;
 }
 
-async function addTask(task) {
-  const response = await fetch('http://localhost:3000/todos', {
-    method: 'POST',
-    body: JSON.stringify({
-      description: task.description,
-      priority: task.priority
-    }),
-    headers: {
-      "Content-Type": "application/json"
-    }
-  });
-  const data = await response.json();
-}
+button.addEventListener('click', async () => {
+  const serverResponse = await getData();
 
-async function render() {
-  const response = await fetch('http://localhost:3000/todos');
-  const array = await response.json();
+  const temp = serverResponse.main.temp;
+  const visibility = serverResponse.visibility;
   
-  let finishedHtml = '';
-
-  for(let i = 0; i < array.length; i++) {
-    finishedHtml = finishedHtml + createHtml(array[i].description, array[i].priority);
-  }
-
-  container.innerHTML = finishedHtml;
-}
-
-form.addEventListener('submit', async (event) => {
-  event.preventDefault();
-
-  if(input.value.length < 1) {
-    alert('Todo description must be at least 1 character long');
-    return;
-  };
-  
-  if(priority.value < 1) {
-    alert('Priority must be a number greater than 0');
-    return;
-  }
-
-  const task = {
-    description: input.value,
-    priority: priority.value,
-  };
-  
-  await addTask(task);
-
-  await render();
+  container.innerHTML = createHtml(temp, visibility);
 });
-
-sort.addEventListener('click', async () => {
-  taskList.sort((a, b) => (a.priority - b.priority));
-
-  await render();
-});
-
-
-document.addEventListener('DOMContentLoaded', async () => {
-  await render();
-})
